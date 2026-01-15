@@ -13,6 +13,13 @@ return {
   -- >> ICONS << --
   { "nvim-tree/nvim-web-devicons", lazy = true },
 
+  -- >> COLOR HIGHLIGHTING (Colorizer) << --
+  {
+    "NvChad/nvim-colorizer.lua",
+    event = { "BufReadPre", "BufNewFile" },
+    opts = { "*" },
+  },
+
   -- >> STATUS LINE (Lualine) << --
   {
     "nvim-lualine/lualine.nvim",

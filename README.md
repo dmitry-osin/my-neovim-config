@@ -11,6 +11,7 @@ Modular Neovim setup with Lazy.nvim. Designed for Lua, Python, JS/TS, Vue, HTML,
 - UI stack: Catppuccin theme, Lualine statusline (LSP status), Dashboard, Noice notifications.
 - File explorer, fuzzy finder, floating terminal, and LazyGit integration.
 - Editor helpers: autopairs, autotag, and quick commenting.
+- Color highlighting for HEX/RGB/HSL values.
 
 ## Screenshots
 ![Dashboard](images/dashboard.png)
