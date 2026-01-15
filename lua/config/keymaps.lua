@@ -11,7 +11,6 @@ map({ 'i', 'x', 'n', 's' }, '<C-s>', '<cmd>w<cr><esc>', { desc = "Save file" })
 
 -- Exit insert mode quickly
 map('i', 'jj', '<Esc>', { desc = "Exit insert mode" })
-map('i', 'jk', '<Esc>', { desc = "Exit insert mode" })
 
 -- Window Navigation (Ctrl + h/j/k/l)
 map('n', '<C-h>', '<C-w>h', { desc = "Go to left window" })

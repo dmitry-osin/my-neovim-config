@@ -29,52 +29,42 @@ return {
       { "<leader>ce", "<cmd>ConjureEvalCurrentForm<cr>", desc = "Eval current form (nREPL)" },
       { "<leader>cE", "<cmd>ConjureEvalRootForm<cr>", desc = "Eval root form (nREPL)" },
       {
-        "<leader>cs",
-        function()
-          local nrepl_file = vim.fn.findfile(".nrepl", ".;")
-          if nrepl_file == "" then
-            vim.notify(".nrepl not found in project root", vim.log.levels.WARN)
-            return
-          end
-
-          local lines = vim.fn.readfile(nrepl_file)
-          local port = lines[1] and lines[1]:match("%d+")
-          if not port then
-            vim.notify("Invalid .nrepl port", vim.log.levels.ERROR)
-            return
-          end
-
-          vim.cmd("ConjureConnect localhost:" .. port)
-        end,
-        desc = "Connect nREPL from .nrepl",
-      },
-      {
         "<leader>cS",
         function()
           local project_file = vim.fn.findfile("project.clj", ".;")
           local root = project_file ~= "" and vim.fn.fnamemodify(project_file, ":h") or vim.loop.cwd()
 
           vim.notify("Starting nREPL via lein...", vim.log.levels.INFO)
-          vim.fn.jobstart({ "lein", "repl", ":headless" }, { cwd = root, detach = true })
+          local connected = false
 
-          local timer = vim.loop.new_timer()
-          local function try_connect()
-            local nrepl_file = vim.fn.findfile(".nrepl", root .. ";")
-            if nrepl_file ~= "" then
-              timer:stop()
-              timer:close()
-              local lines = vim.fn.readfile(nrepl_file)
-              local port = lines[1] and lines[1]:match("%d+")
-              if not port then
-                vim.notify("Invalid .nrepl port", vim.log.levels.ERROR)
-                return
+          vim.fn.jobstart({ "lein", "repl", ":headless" }, {
+            cwd = root,
+            on_stdout = function(_, data)
+              if connected or not data then return end
+              for _, line in ipairs(data) do
+                local host, port = line:match("nrepl://([%d%.]+):(%d+)")
+                if host and port then
+                  connected = true
+                  vim.schedule(function()
+                    vim.cmd("ConjureConnect " .. host .. ":" .. port)
+                    vim.notify("Connected to nREPL on " .. host .. ":" .. port, vim.log.levels.INFO)
+                  end)
+                  return
+                end
               end
-              vim.cmd("ConjureConnect localhost:" .. port)
-              vim.notify("Connected to nREPL on port " .. port, vim.log.levels.INFO)
-            end
-          end
-
-          timer:start(200, 200, vim.schedule_wrap(try_connect))
+            end,
+            on_stderr = function(_, data)
+              if not data then return end
+              for _, line in ipairs(data) do
+                if line ~= "" then
+                  vim.schedule(function()
+                    vim.notify(line, vim.log.levels.WARN)
+                  end)
+                  return
+                end
+              end
+            end,
+          })
         end,
         desc = "Start lein nREPL and connect",
       },

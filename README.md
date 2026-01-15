@@ -62,7 +62,8 @@ Leader key: `Space`
 ### Clojure (Conjure / nREPL)
 - `Leader+ce` — eval current form
 - `Leader+cE` — eval root form
-- `Leader+cs` — connect nREPL from `.nrepl`
+- `Ctrl+Enter` — eval current form
+- `Ctrl+Shift+Enter` — eval root form
 - `Leader+cS` — start `lein` nREPL and connect
 
 ### Comments (Comment.nvim)
