@@ -27,12 +27,10 @@ return {
     opts = {
       options = {
         theme = "catppuccin",
-        globalstatus = true,
+        globalstatus = false,
         component_separators = '|',
         section_separators = '',
-        disabled_filetypes = {
-          statusline = { "neo-tree" },
-        },
+        disabled_filetypes = { "neo-tree", "qf" },
       },
       tabline = {
         lualine_a = { 'buffers' },

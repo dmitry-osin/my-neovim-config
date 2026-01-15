@@ -109,6 +109,8 @@ return {
             vim.keymap.set('n', 'gD', vim.lsp.buf.declaration, opts("Go to Declaration"))
             vim.keymap.set('n', 'gr', vim.lsp.buf.references, opts("References"))
             vim.keymap.set('n', 'gi', vim.lsp.buf.implementation, opts("Go to Implementation"))
+            vim.keymap.set('n', 'gt', vim.lsp.buf.type_definition, opts("Go to Type Definition"))
+            vim.keymap.set('n', 'ga', vim.lsp.buf.code_action, opts("Code Action (LSP)"))
             
             -- Info
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts("Documentation (Hover)"))
@@ -117,7 +119,7 @@ return {
             
             -- Actions
             vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, opts("Rename"))
-            vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts("Code Action"))
+            vim.keymap.set({ 'n', 'v' }, '<leader>ca', vim.lsp.buf.code_action, opts("Code Action (LSP)"))
             vim.keymap.set('n', '<leader>cf', function() vim.lsp.buf.format { async = true } end, opts("Format Document"))
           end,
         })

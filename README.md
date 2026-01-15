@@ -28,6 +28,8 @@ Leader key: `Space`
 - `jj` — exit insert mode
 - `jk` — exit insert mode
 - `Ctrl+h/j/k/l` — window navigation
+- `Ctrl+Arrow` — window navigation
+- `Leader+q` — close buffer
 - `Tab` — next buffer
 - `Shift+Tab` — previous buffer
 
@@ -46,11 +48,13 @@ Leader key: `Space`
 - `gD` — go to declaration
 - `gr` — references
 - `gi` — go to implementation
+- `gt` — go to type definition
+- `ga` — code action (LSP)
 - `K` — hover documentation
 - `Ctrl+k` (insert) — signature help
 - `Leader+cd` — documentation (popup)
 - `Leader+cr` — rename
-- `Leader+ca` — code action
+- `Leader+ca` — code action (LSP)
 - `Leader+cf` — format document
 
 ### Comments (Comment.nvim)
