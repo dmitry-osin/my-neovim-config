@@ -47,7 +47,8 @@ return {
             "c", "lua", "vim", "vimdoc", "query", 
             "python", "javascript", "typescript", "tsx", 
             "vue", "html", "css", "sql", "bash", "json", "markdown",
-            "scala", "clojure", "c_sharp", "rust", "toml", "yaml"
+            "scala", "clojure", "c_sharp", "rust", "toml", "yaml", "dockerfile",
+            "java", "kotlin", "groovy"
         },
         auto_install = true,
         highlight = { enable = true },

@@ -5,9 +5,11 @@ Modular Neovim setup with Lazy.nvim. Designed for Lua, Python, JS/TS, Vue, HTML,
 ## Features
 - Modular Lua configuration with separate `options`, `keymaps`, and plugin specs.
 - Lazy.nvim plugin manager with lockfile-pinned versions.
-- LSP via Mason + nvim-lspconfig (configured for `lua_ls`, `ts_ls`, `html`, `cssls`, `sqlls`, `pyright`; Volar handler included for Vue).
+- LSP via Mason + nvim-lspconfig (configured for `lua_ls`, `ts_ls`, `html`, `cssls`, `sqlls`, `pyright`, `dockerls`, `yamlls`, `jdtls`, `kotlin_language_server`, `groovyls`, `clojure_lsp`; Volar handler included for Vue).
 - Completion with nvim-cmp + LuaSnip + friendly-snippets.
-- Treesitter highlighting and indentation for common languages.
+- Treesitter highlighting and indentation for common languages (including Dockerfile, Java, Kotlin, Groovy), plus Docker Compose schemas via YAML LSP.
+- Lombok support via `jdtls` with auto-install of the `lombok` Mason package (or `LOMBOK_JAR`).
+- Clojure nREPL support via Conjure.
 - UI stack: Catppuccin theme, Lualine statusline (LSP status), Dashboard, Noice notifications.
 - File explorer, fuzzy finder, floating terminal, and LazyGit integration.
 - Editor helpers: autopairs, autotag, and quick commenting.
@@ -56,6 +58,12 @@ Leader key: `Space`
 - `Leader+cr` — rename
 - `Leader+ca` — code action (LSP)
 - `Leader+cf` — format document
+
+### Clojure (Conjure / nREPL)
+- `Leader+ce` — eval current form
+- `Leader+cE` — eval root form
+- `Leader+cs` — connect nREPL from `.nrepl`
+- `Leader+cS` — start `lein` nREPL and connect
 
 ### Comments (Comment.nvim)
 - `gcc` — toggle line comment

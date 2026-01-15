@@ -13,6 +13,7 @@ return {
     config = function()
         local mason_lspconfig = require("mason-lspconfig")
         local lspconfig = require("lspconfig")
+        local lsp_util = require("lspconfig.util")
         local capabilities = require("cmp_nvim_lsp").default_capabilities()
         
         local handlers =  {
@@ -21,7 +22,11 @@ return {
         }
 
         mason_lspconfig.setup({ 
-            ensure_installed = { "lua_ls", "ts_ls", "html", "cssls", "sqlls", "pyright" }, 
+            ensure_installed = {
+                "lua_ls", "ts_ls", "html", "cssls", "sqlls", "pyright",
+                "dockerls", "yamlls", "jdtls", "kotlin_language_server", "groovyls",
+                "clojure_lsp"
+            },
             automatic_installation = true,
             handlers = {
                 function(server_name)
@@ -41,6 +46,95 @@ return {
                         capabilities = capabilities,
                         handlers = handlers,
                         filetypes = {'typescript', 'javascript', 'javascriptreact', 'typescriptreact', 'vue', 'json'}
+                    })
+                end,
+                ["yamlls"] = function()
+                    lspconfig.yamlls.setup({
+                        capabilities = capabilities,
+                        handlers = handlers,
+                        settings = {
+                            yaml = {
+                                schemas = {
+                                    ["https://raw.githubusercontent.com/compose-spec/compose-spec/master/schema/compose-spec.json"] = {
+                                        "docker-compose*.yml",
+                                        "docker-compose*.yaml",
+                                        "compose*.yml",
+                                        "compose*.yaml",
+                                    },
+                                },
+                            },
+                        },
+                    })
+                end,
+                ["jdtls"] = function()
+                    local java_runtime = vim.env.JAVA_HOME
+                    local function ensure_lombok_installed()
+                        local ok, registry = pcall(require, "mason-registry")
+                        if not ok then return end
+                        local ok_pkg, pkg = pcall(registry.get_package, "lombok")
+                        if not ok_pkg then return end
+                        if not pkg:is_installed() then
+                            pkg:install()
+                        end
+                    end
+
+                    local function find_lombok_jar()
+                        local mason_lombok = vim.fn.stdpath("data") .. "/mason/share/lombok/lombok.jar"
+                        if vim.uv.fs_stat(mason_lombok) then
+                            return mason_lombok
+                        end
+                        local env_lombok = vim.env.LOMBOK_JAR
+                        if env_lombok and env_lombok ~= "" and vim.uv.fs_stat(env_lombok) then
+                            return env_lombok
+                        end
+                        return nil
+                    end
+
+                    local java_settings = {
+                        signatureHelp = { enabled = true },
+                        contentProvider = { preferred = "fernflower" },
+                        configuration = {},
+                        format = {
+                            enabled = true,
+                            settings = {
+                                url = "https://raw.githubusercontent.com/google/styleguide/gh-pages/eclipse-java-google-style.xml",
+                                profile = "GoogleStyle",
+                            },
+                        },
+                        import = {
+                            gradle = { enabled = true },
+                            maven = { enabled = true },
+                        },
+                        referencesCodeLens = { enabled = true },
+                        implementationsCodeLens = { enabled = true },
+                    }
+
+                    if java_runtime and java_runtime ~= "" then
+                        java_settings.configuration.runtimes = {
+                            { name = "JavaSE-17", path = java_runtime },
+                        }
+                    end
+
+                    ensure_lombok_installed()
+                    local cmd = { "jdtls" }
+                    local lombok_jar = find_lombok_jar()
+                    if lombok_jar then
+                        table.insert(cmd, "--jvm-arg=-javaagent:" .. lombok_jar)
+                    end
+
+                    lspconfig.jdtls.setup({
+                        capabilities = capabilities,
+                        handlers = handlers,
+                        cmd = cmd,
+                        root_dir = lsp_util.root_pattern(
+                            "gradlew",
+                            "mvnw",
+                            "pom.xml",
+                            "build.gradle",
+                            "build.gradle.kts",
+                            ".git"
+                        ),
+                        settings = { java = java_settings },
                     })
                 end,
             }
