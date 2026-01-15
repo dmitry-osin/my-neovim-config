@@ -14,6 +14,7 @@ Modular Neovim setup with Lazy.nvim. Designed for Lua, Python, JS/TS, Vue, HTML,
 - File explorer, fuzzy finder, floating terminal, and LazyGit integration.
 - Editor helpers: autopairs, autotag, and quick commenting.
 - Color highlighting for HEX/RGB/HSL values.
+- Diagnostics list (Trouble) and Git diff viewer (Diffview).
 
 ## Screenshots
 ![Dashboard](images/dashboard.png)
@@ -62,8 +63,6 @@ Leader key: `Space`
 ### Clojure (Conjure / nREPL)
 - `Leader+ce` — eval current form
 - `Leader+cE` — eval root form
-- `Ctrl+Enter` — eval current form
-- `Ctrl+Shift+Enter` — eval root form
 - `Leader+cS` — start `lein` nREPL and connect
 
 ### Comments (Comment.nvim)
@@ -75,6 +74,21 @@ Leader key: `Space`
 - `Leader+gg` — open LazyGit
 - `Leader+gb` — blame line (popup)
 - `Leader+gB` — toggle line blame (virtual text)
+- `Leader+gs` — stage hunk
+- `Leader+gr` — reset hunk
+- `Leader+gp` — preview hunk
+- `[h` — previous hunk
+- `]h` — next hunk
+- `Leader+gd` — open Diffview
+- `Leader+gD` — close Diffview
+- `Esc` — close Diffview (in Diffview window)
+
+### Diagnostics (Trouble)
+- `Leader+xx` — diagnostics list
+- `Leader+xw` — workspace diagnostics
+- `Leader+xd` — document diagnostics
+- `Leader+xq` — quickfix list
+- `Leader+xl` — location list
 
 ### Terminal (ToggleTerm)
 - `Ctrl+\` — toggle terminal

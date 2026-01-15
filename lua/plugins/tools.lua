@@ -18,7 +18,30 @@ return {
     keys = {
       { "<leader>gb", "<cmd>Gitsigns blame_line<cr>", desc = "Blame line (popup)" },
       { "<leader>gB", "<cmd>Gitsigns toggle_current_line_blame<cr>", desc = "Toggle line blame" },
+      { "<leader>gs", "<cmd>Gitsigns stage_hunk<cr>", desc = "Stage hunk" },
+      { "<leader>gr", "<cmd>Gitsigns reset_hunk<cr>", desc = "Reset hunk" },
+      { "<leader>gp", "<cmd>Gitsigns preview_hunk<cr>", desc = "Preview hunk" },
+      { "]h", "<cmd>Gitsigns next_hunk<cr>", desc = "Next hunk" },
+      { "[h", "<cmd>Gitsigns prev_hunk<cr>", desc = "Previous hunk" },
     },
+  },
+
+  -- >> GIT DIFF VIEW (Diffview) << --
+  {
+    "sindrets/diffview.nvim",
+    dependencies = { "nvim-lua/plenary.nvim" },
+    keys = {
+      { "<leader>gd", "<cmd>DiffviewOpen<cr>", desc = "Open Diffview" },
+      { "<leader>gD", "<cmd>DiffviewClose<cr>", desc = "Close Diffview" },
+    },
+    config = function()
+      vim.api.nvim_create_autocmd("FileType", {
+        pattern = "DiffviewFiles",
+        callback = function(ev)
+          vim.keymap.set("n", "<Esc>", "<cmd>DiffviewClose<cr>", { buffer = ev.buf, silent = true, desc = "Close Diffview" })
+        end,
+      })
+    end,
   },
 
   -- >> Clojure nREPL (Conjure) << --
@@ -88,6 +111,20 @@ return {
     }
   },
 
+  -- >> DIAGNOSTICS LIST (Trouble) << --
+  {
+    "folke/trouble.nvim",
+    dependencies = { "nvim-tree/nvim-web-devicons" },
+    cmd = "Trouble",
+    keys = {
+      { "<leader>xx", "<cmd>Trouble diagnostics toggle<cr>", desc = "Diagnostics (Trouble)" },
+      { "<leader>xw", "<cmd>Trouble diagnostics toggle<cr>", desc = "Workspace diagnostics" },
+      { "<leader>xd", "<cmd>Trouble diagnostics toggle filter.buf=0<cr>", desc = "Document diagnostics" },
+      { "<leader>xq", "<cmd>Trouble qflist toggle<cr>", desc = "Quickfix list" },
+      { "<leader>xl", "<cmd>Trouble loclist toggle<cr>", desc = "Location list" },
+    },
+  },
+
   -- >> WHICH-KEY (Keymap hints) << --
   { 
     "folke/which-key.nvim", 
@@ -98,6 +135,7 @@ return {
         { "<leader>f", group = "+Find (Telescope)", icon = " " },
         { "<leader>g", group = "+Git", icon = " " },
         { "<leader>t", group = "+Terminal", icon = " " },
+        { "<leader>x", group = "+Diagnostics", icon = " " },
         { "<leader>e", desc = "Explorer", icon = " " },
       }
     } 
