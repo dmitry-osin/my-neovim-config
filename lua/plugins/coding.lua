@@ -53,6 +53,56 @@ return {
             local function opts(desc)
                 return { buffer = ev.buf, desc = desc }
             end
+
+            local function trim_empty_edges(lines)
+                local start = 1
+                local finish = #lines
+                while start <= finish and lines[start] == "" do
+                    start = start + 1
+                end
+                while finish >= start and lines[finish] == "" do
+                    finish = finish - 1
+                end
+                if start > finish then
+                    return {}
+                end
+                return vim.list_slice(lines, start, finish)
+            end
+
+            local function open_lsp_doc_popup()
+                local client = vim.lsp.get_client_by_id(ev.data.client_id)
+                local params = vim.lsp.util.make_position_params(0, client and client.offset_encoding or "utf-16")
+                vim.lsp.buf_request(ev.buf, "textDocument/hover", params, function(err, result)
+                    if err or not result or not result.contents then return end
+                    local lines = vim.lsp.util.convert_input_to_markdown_lines(result.contents)
+                    lines = trim_empty_edges(lines)
+                    if vim.tbl_isempty(lines) then return end
+                    local doc_buf, doc_win = vim.lsp.util.open_floating_preview(lines, "markdown", {
+                        border = "rounded",
+                    })
+                    if doc_buf and doc_win then
+                        local function close_doc_popup()
+                            if vim.api.nvim_win_is_valid(doc_win) then
+                                vim.api.nvim_win_close(doc_win, true)
+                            end
+                            pcall(vim.keymap.del, "n", "<Esc>", { buffer = ev.buf })
+                        end
+
+                        vim.keymap.set("n", "<Esc>", function()
+                            close_doc_popup()
+                            vim.cmd("nohlsearch")
+                        end, { buffer = ev.buf, nowait = true, silent = true, desc = "Close LSP doc popup" })
+
+                        vim.api.nvim_create_autocmd("WinClosed", {
+                            pattern = tostring(doc_win),
+                            once = true,
+                            callback = function()
+                                pcall(vim.keymap.del, "n", "<Esc>", { buffer = ev.buf })
+                            end,
+                        })
+                    end
+                end)
+            end
             
             -- Navigation
             vim.keymap.set('n', 'gd', vim.lsp.buf.definition, opts("Go to Definition"))
@@ -63,6 +113,7 @@ return {
             -- Info
             vim.keymap.set('n', 'K', vim.lsp.buf.hover, opts("Documentation (Hover)"))
             vim.keymap.set('i', '<C-k>', vim.lsp.buf.signature_help, opts("Signature Help"))
+            vim.keymap.set('n', '<leader>cd', open_lsp_doc_popup, opts("Documentation (Popup)"))
             
             -- Actions
             vim.keymap.set('n', '<leader>cr', vim.lsp.buf.rename, opts("Rename"))

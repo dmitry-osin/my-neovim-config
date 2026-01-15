@@ -43,6 +43,7 @@ Leader key: `Space`
 - `gi` — go to implementation
 - `K` — hover documentation
 - `Ctrl+k` (insert) — signature help
+- `Leader+cd` — documentation (popup)
 - `Leader+cr` — rename
 - `Leader+ca` — code action
 - `Leader+cf` — format document
