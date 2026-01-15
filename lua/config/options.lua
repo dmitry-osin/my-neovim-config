@@ -22,3 +22,4 @@ opt.splitbelow = true      -- Split horizontal windows to the bottom
 opt.termguicolors = true   -- Enable 24-bit RGB color
 opt.cursorline = true      -- Highlight the current line
 opt.scrolloff = 8          -- Keep 8 lines above/below cursor
+opt.showtabline = 2        -- Always show tabline (for buffers/tabs)

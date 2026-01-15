@@ -30,6 +30,12 @@ return {
         globalstatus = true,
         component_separators = '|',
         section_separators = '',
+        disabled_filetypes = {
+          statusline = { "neo-tree" },
+        },
+      },
+      tabline = {
+        lualine_a = { 'buffers' },
       },
       sections = {
         lualine_x = {

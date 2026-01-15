@@ -25,7 +25,11 @@ Leader key: `Space`
 ### General
 - `Esc` — clear search highlight
 - `Ctrl+s` — save file (normal/insert/visual/select)
+- `jj` — exit insert mode
+- `jk` — exit insert mode
 - `Ctrl+h/j/k/l` — window navigation
+- `Tab` — next buffer
+- `Shift+Tab` — previous buffer
 
 ### File Explorer (Neo-tree)
 - `Leader+e` — toggle file explorer
